@@ -1,0 +1,3 @@
+DB_USER=root
+DB_PW=rs845#1539@S
+DB_URL=jdbc:mysql://localhost:3306/mission
