@@ -2,6 +2,7 @@ package com.example.umc10th.domain.mission.converter;
 
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 
+
 public class MissionConverter {
 
     public static MissionResDTO.RequestBody toRequestBody(
@@ -9,7 +10,7 @@ public class MissionConverter {
             Long longTest
     ){
         return MissionResDTO.RequestBody.builder()
-                .stringTest((stringTest)
+                .stringTest(stringTest)
                 .longTest(longTest)
                 .build();
     }
