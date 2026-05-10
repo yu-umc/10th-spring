@@ -1,0 +1,61 @@
+package com.springboot.mission.domain.review.service;
+
+import com.springboot.mission.domain.review.dto.ReviewRequestDTO;
+import com.springboot.mission.domain.review.dto.ReviewResponseDTO;
+import com.springboot.mission.domain.review.entity.Review;
+import com.springboot.mission.domain.review.exception.ReviewException;
+import com.springboot.mission.domain.review.repository.ReviewRepository;
+import com.springboot.mission.domain.store.entity.Store;
+import com.springboot.mission.domain.store.repository.StoreRepository;
+import com.springboot.mission.domain.user.entity.User;
+import com.springboot.mission.domain.user.repository.UserRepository;
+import com.springboot.mission.global.apiPayload.code.GeneralErrorCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+
+@Service
+@RequiredArgsConstructor
+@Transactional(readOnly = true)
+public class ReviewService {
+
+    private final ReviewRepository reviewRepository;
+    private final StoreRepository storeRepository;
+    private final UserRepository userRepository;
+
+    /**
+     * 리뷰를 작성하고, 해당 가게의 최신 리뷰 목록을 반환합니다.
+     */
+    @Transactional
+    public ReviewResponseDTO.ReviewListResponse postReviewAndGetList(
+            Long userId, Long storeId, ReviewRequestDTO.PostReview request, String token) {
+
+        // 1. 유저 존재 확인
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ReviewException(GeneralErrorCode.NOT_FOUND));
+
+        // 2. 가게 존재 확인
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new ReviewException(GeneralErrorCode.NOT_FOUND));
+
+        // 3. 리뷰 데이터 검증
+        if (request.star() <= 0) {
+            // MemberErrorCode나 별도의 ReviewErrorCode를 정의하여 사용 가능합니다.
+            throw new ReviewException(GeneralErrorCode.BAQ_REQUEST);
+        }
+
+        // 4. 저장 및 목록 반환 로직
+        Review review = request.toEntity(store, user.getNickname());
+        reviewRepository.save(review);
+
+        List<Review> reviews = reviewRepository.findAllByStore(store);
+
+        return ReviewResponseDTO.ReviewListResponse.builder()
+                .content(reviews.stream().map(ReviewResponseDTO.GetReviewInfo::from).toList())
+                .total_mission(reviews.size())
+                .page_offset(0)
+                .build();
+    }
+}
