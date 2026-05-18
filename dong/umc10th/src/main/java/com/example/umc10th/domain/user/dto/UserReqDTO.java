@@ -1,11 +1,11 @@
 package com.example.umc10th.domain.user.dto;
 
-import lombok.Getter;
+import jakarta.validation.constraints.NotNull;
 
 public class UserReqDTO {
 
-    @Getter
-    public static class UserIdReqDTO{
-        private Long userId;
-    }
+    public record UserIdReqDTO(
+        @NotNull(message = "아이디는 필수입니다.")
+        Long userId
+    ){}
 }
