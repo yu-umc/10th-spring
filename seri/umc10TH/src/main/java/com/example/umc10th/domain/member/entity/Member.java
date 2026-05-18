@@ -1,6 +1,8 @@
 package com.example.umc10th.domain.member.entity;
 
 
+import com.example.umc10th.domain.member.entity.mapping.MemberFood;
+import com.example.umc10th.domain.member.entity.mapping.MemberTerm;
 import com.example.umc10th.domain.member.enums.Gender;
 import com.example.umc10th.domain.mission.enums.Address;
 import jakarta.persistence.*;
@@ -10,6 +12,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @Entity
 @Getter
@@ -36,4 +39,10 @@ public class Member {
     @Column(name = "address")
     @Enumerated(EnumType.STRING)
     private Address address;
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberFood> memberFoodList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member")
+    private List<MemberTerm> memberTermList = new ArrayList<>();
 }
