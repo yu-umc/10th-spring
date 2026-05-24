@@ -14,6 +14,7 @@ import org.apache.tomcat.websocket.server.WsWriteTimeout;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,14 +52,18 @@ public class UserService {
     }
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public User joinUser(AuthReqDTO.join request){
+
+        String encodedPassword = passwordEncoder.encode(request.getPassword());
+
         User newUser = User.builder()
                 .name(request.getName())
                 .gender(request.getGender())
                 .birth(request.getBirth())
                 .email(request.getEmail())
-                .password(request.getPassword())
+                .password(encodedPassword)
                 .nickname(request.getNickname())
                 .build();
 
