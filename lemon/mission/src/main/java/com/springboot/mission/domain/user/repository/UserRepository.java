@@ -1,6 +1,8 @@
 package com.springboot.mission.domain.user.repository;
 
 import com.springboot.mission.domain.user.entity.User;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,4 +16,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByMail(String mail);
 
     Optional<User> findByMail(String mail);
+
+    boolean existsByEmail(String email);
+
+    Optional<User> findByEmail(String email);
 }

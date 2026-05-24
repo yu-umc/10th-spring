@@ -11,15 +11,16 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @Builder
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UUID")
+    @Column(name = "UUID") // 기존 설계대로 테이블의 PK 컬럼명을 UUID로 매핑
     private Long id;
 
     @Column(nullable = false, length = 255)
     private String name;
 
-    @Column(nullable = false) // 소셜에서 생년월일을 제공하지 않을 수도 있다면 false 제거 검토
+    @Column(nullable = false)
     private LocalDate birth;
 
     @Column
@@ -33,10 +34,16 @@ public class User {
     private Boolean isDeleted = false;
 
     @Column(nullable = false, length = 255)
-    private String social; // 예: "KAKAO", "GOOGLE", "NAVER"
+    private String social; // 예: "KAKAO", "LOCAL"(일반가입) 등
 
     @Column(nullable = false, length = 255, unique = true)
-    private String mail; // 소셜에서 제공하는 이메일 혹은 고유 식별값(ID)
+    private String mail; // 소셜에서 제공하는 고유 식별값(ID) 또는 메일
+
+    @Column(nullable = false, length = 255, unique = true)
+    private String email; // 일반 로그인용 아이디(이메일)
+
+    @Column(nullable = false, length = 255)
+    private String password; // BCrypt로 암호화되어 저장될 비밀번호
 
     @Column(name = "phone_number", length = 255)
     private String phoneNumber;
