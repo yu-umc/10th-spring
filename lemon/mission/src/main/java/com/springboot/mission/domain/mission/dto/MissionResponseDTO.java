@@ -1,6 +1,6 @@
 package com.springboot.mission.domain.mission.dto;
 
-import com.springboot.mission.domain.mission.entity.MemberMission;
+import com.springboot.mission.domain.mission.entity.UserMission;
 import com.springboot.mission.domain.mission.entity.Mission;
 import com.springboot.mission.domain.store.entity.Store;
 import lombok.Builder;
@@ -71,7 +71,7 @@ public class MissionResponseDTO {
             Integer score,
             Boolean state
     ) {
-        public static MyMissionInfo from(MemberMission mission) {
+        public static MyMissionInfo from(UserMission mission) {
             return MyMissionInfo.builder()
                     .mission_id(mission.getId())
                     .store_name(mission.getMission().getStore().getTitle())
@@ -94,7 +94,7 @@ public class MissionResponseDTO {
             Boolean is_first,
             Boolean is_last
     ) {
-        public static MyMissionPageResponse from(Page<MemberMission> myMissionPage) {
+        public static MyMissionPageResponse from(Page<UserMission> myMissionPage) {
             return MyMissionPageResponse.builder()
                     .missions(myMissionPage.stream()
                             .map(MyMissionInfo::from)
