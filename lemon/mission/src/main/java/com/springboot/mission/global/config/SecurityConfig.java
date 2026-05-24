@@ -14,11 +14,11 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final String[] allowUris = {
-            // Swagger 허용
             "/swagger-ui/**",
             "/swagger-resources/**",
             "/v3/api-docs/**",
-            "/auth/**"
+            "/auth/**",
+            "/user/join"
     };
 
     /**
@@ -37,8 +37,12 @@ public class SecurityConfig {
         http
                 // REST API이므로 CSRF 보안 비활성화
                 .csrf(AbstractHttpConfigurer::disable)
+                // 폼 로그인 세부 설정 지정
                 .formLogin(form -> form
-                        .defaultSuccessUrl("/swagger-ui/index.html", true)
+                        .loginProcessingUrl("/user/login")        // 🌟 로그인 요청을 처리할 API 주소 명시 (POST /user/login)
+                        .usernameParameter("email")               // 로그인 ID 파라미터명 (Request Body의 key값)
+                        .passwordParameter("password")            // 로그인 PW 파라미터명 (Request Body의 key값)
+                        .defaultSuccessUrl("/swagger-ui/index.html", true) // 로그인 성공 시 이동할 곳
                         .permitAll()
                 )
                 .logout(logout -> logout
