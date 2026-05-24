@@ -2,10 +2,15 @@ package com.example.umc10th.domain.user.service;
 
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
 import com.example.umc10th.domain.mission.enums.MissionStatus;
+import com.example.umc10th.domain.user.dto.AuthReqDTO;
+import com.example.umc10th.domain.user.dto.AuthResDTO;
+import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.domain.user.repository.UserMissionRepository;
 import com.example.umc10th.domain.user.converter.UserConverter;
 import com.example.umc10th.domain.user.dto.UserResDTO;
+import com.example.umc10th.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.websocket.server.WsWriteTimeout;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -45,4 +50,18 @@ public class UserService {
         );
     }
 
+    private final UserRepository userRepository;
+
+    public User joinUser(AuthReqDTO.join request){
+        User newUser = User.builder()
+                .name(request.getName())
+                .gender(request.getGender())
+                .birth(request.getBirth())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .nickname(request.getNickname())
+                .build();
+
+        return userRepository.save(newUser);
+    }
 }

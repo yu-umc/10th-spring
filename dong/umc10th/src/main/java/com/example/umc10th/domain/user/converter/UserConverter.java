@@ -4,8 +4,11 @@ import com.example.umc10th.domain.mission.converter.MissionConverter;
 import com.example.umc10th.domain.mission.dto.MissionResDTO;
 import com.example.umc10th.domain.mission.entity.Mission;
 import com.example.umc10th.domain.mission.entity.mapping.UserMission;
+import com.example.umc10th.domain.user.dto.AuthResDTO;
 import com.example.umc10th.domain.user.dto.UserResDTO;
+import com.example.umc10th.domain.user.entity.User;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +34,14 @@ public class UserConverter {
                 .data(data)
                 .pageNumber(pageNumber)
                 .pageSize(pageSize)
+                .build();
+    }
+
+    public static AuthResDTO.joinResult tojoinResult(User user) {
+        return AuthResDTO.joinResult.builder()
+                .userId(user.getId())
+                .nickname(user.getNickname())
+                .createdAt(LocalDateTime.now())
                 .build();
     }
 }

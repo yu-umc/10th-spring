@@ -1,5 +1,6 @@
 package com.example.umc10th.domain.user.entity;
 
+import com.example.umc10th.domain.user.enums.Certification;
 import com.example.umc10th.domain.user.enums.Gender;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -23,7 +24,10 @@ public class User {
     private Long id;
 
     @Column(name = "user_name")
-    private String user_name;
+    private String name;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "gender")
     @Enumerated(EnumType.STRING)
@@ -33,8 +37,18 @@ public class User {
     private LocalDate birth;
 
     @Column(name = "user_address")
-    private String user_address;
+    private String address;
 
     @Column(name = "password")
     private String password;
+
+    @Column(name = "nickname")
+    private String nickname;
+
+    @Column(name = "phone_number")
+    private String phone_number;
+
+    @Column(name = "certification")
+    @Enumerated(EnumType.STRING)
+    private Certification certification;
 }

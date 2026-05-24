@@ -20,7 +20,7 @@ public class UserController {
     private final UserService userService;
 
     // 내 미션을 모아서 보는 쿼리(진행중/완료)
-    @PostMapping("/missions")
+    @GetMapping("/missions")
     public ApiResponse<UserResDTO.Pagination<UserResDTO.UserMissionDetailDTO>> getUserMissions(
             @RequestBody @Valid UserReqDTO.UserIdReqDTO request,
             @RequestParam(defaultValue = "CHALLENGING") MissionStatus status,
@@ -32,4 +32,12 @@ public class UserController {
         BaseSuccessCode code = MissionSuccessCode.MISSION_OK;
         return ApiResponse.onSuccess(code, response);
     }
+
+//    // 마이 페이지 조회
+//    @GetMapping("/{userId}/mypage")
+//    public ApiResponse<UserResDTO.MyPageInfo> getMyPage(
+//            @PathVariable(name = "userId") Long userId
+//    ) {
+//        UserResDTO.MyPageInfo response = userService.getMyPageInfo();
+//    }
 }
