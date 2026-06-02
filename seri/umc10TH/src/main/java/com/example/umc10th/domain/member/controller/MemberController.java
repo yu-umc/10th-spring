@@ -67,4 +67,13 @@ public class MemberController {
         return ApiResponse.onSuccess(code, memberService.getInfo(dto));
 
     }
+
+
+    @GetMapping("/v2/users/me")
+    public ApiResponse<MemberResDTO.GetInfo> getInfo(
+
+    ){
+        BaseSuccessCode code = MemberSuccessCode.OK;
+        return ApiResponse.onSuccess(code, memberService.getInfo(member));
+    }
 }
