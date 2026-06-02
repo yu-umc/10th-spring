@@ -1,9 +1,9 @@
 package com.example.umc10th.global.config;
 
-import com.example.umc10th.domain.user.entity.User;
 import com.example.umc10th.global.security.exception.CustomAccessDenied;
 import com.example.umc10th.global.security.filter.JwtAuthFilter;
-import com.example.umc10th.global.security.service.CustomEntryPoint;
+import com.example.umc10th.global.security.handler.CustomEntryPoint;
+import com.example.umc10th.global.security.service.CustomOAuthService;
 import com.example.umc10th.global.security.service.CustomUserDetailsService;
 import com.example.umc10th.global.security.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +39,7 @@ public class SecurityConfig {
     };
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, CustomOAuthService customOAuthService) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 // URI 허용 여부
@@ -64,6 +64,22 @@ public class SecurityConfig {
                 .exceptionHandling( exception -> exception
                         .accessDeniedHandler(customAccessDenied())
                         .authenticationEntryPoint(customEntryPoint())
+                )
+                .oauth2Login(oauth->ouath
+                        // 인증 엔트리 포인트
+                        .authorizationEndpoint(auth->auth
+                                .baseUri("/oauth/authorize")
+                        )
+                        // 롤백 주소
+                        .erdirectionEndpoint(redirect -> redirect
+                                .baseUri("/oauth/callback/**")
+                        )
+                        //인증 완료 후 정보 활용
+                        .userInfoEndpoint(userInfo->userInfo
+                                .userService(customOAuthService)
+                        )
+                        // 성공 시 JWT 토큰 발행할 핸들러
+                        .successHandler(oAuthhSuccessHandler())
                 )
         ;
         return http.build();
