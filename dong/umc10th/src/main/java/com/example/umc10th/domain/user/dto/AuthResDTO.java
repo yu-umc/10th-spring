@@ -24,4 +24,11 @@ public class AuthResDTO {
         String nickname;
         LocalDateTime createdAt;
     }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class LoginResult{
+        private String token;
+    }
 }
