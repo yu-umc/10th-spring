@@ -1,12 +1,17 @@
 spring:
   application:
     name: "umc10th"
-
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver # MySQL JDBC 드라이버 클래스 이름
     url: ${DB_URL} # jdbc:mysql://localhost:3306/{데이터베이스명}
     username: ${DB_USER} # MySQL 유저 이름
     password: ${DB_PW} # MySQL 비밀번호
+
+jwt:
+  token:
+    secretKey: ${JWT_SECRET_KEY}
+    expiration:
+      access: 1800000 # 30분
 
     jpa:
       database: mysql # 사용할 데이터베이스 유형 지정 (MySQL)
@@ -17,3 +22,22 @@ spring:
       properties:
         hibernate:
           format_sql: true # 출력되는 SQL 쿼리를 보기 좋게 포맷팅
+
+security:
+  oauth2:
+    client:
+      registration:
+        kakao:
+          client-id: ${KAKAO_REST_API_KEY}
+          client-secret: ${KAKAO_REST_API_SECRET}
+          authorization-grant-type: authorization_code
+          redirect-uri: "http://localhost:8080/oauth/callback/kakao"
+          scope:
+            - profile_nickname
+            - account_email
+      provider:
+        kakao:
+          authorization-uri: "https://kauth.kakao.com/oauth/authorize"
+          token-uri: "https://kauth.kakao.com/oauth/token"
+          user-info-uri: "https://kapi.kakao.com/v2/user/me"
+          userNameAttribute: id
